@@ -21,7 +21,7 @@
           };
         };
 
-        lib = pkgs.lib;
+        inherit (pkgs) lib;
 
       in
       {
@@ -31,6 +31,19 @@
 
           in
           {
+            packages = with pkgs; [
+              black
+              mdformat
+              pre-commit
+              ruff
+              shfmt
+              statix
+              toml-sort
+              treefmt2
+              yamlfmt
+              yamllint
+            ];
+
             shellHook = ''
               ${pre-commit-bin} install --allow-missing-config > /dev/null
             '';

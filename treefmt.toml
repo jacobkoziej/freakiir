@@ -1,0 +1,90 @@
+[formatter.black]
+command = "black"
+options = [
+  "--line-length=79",
+]
+includes = [
+  "*.py",
+]
+
+[formatter.mdformat]
+command = "mdformat"
+options = [
+  "--number",
+  "--wrap=72",
+]
+includes = [
+  "*.md",
+]
+
+[formatter.nix]
+command = "nix"
+options = [
+  "fmt",
+]
+includes = [
+  "*.nix",
+]
+
+[formatter.ruff]
+command = "ruff"
+options = [
+  "check",
+]
+includes = [
+  "*.py",
+]
+
+[formatter.shfmt]
+command = "shfmt"
+options = [
+  "--write",
+  "--binary-next-line",
+  "--space-redirects",
+  "--func-next-line",
+]
+includes = [
+  "*.sh",
+  ".envrc",
+]
+
+[formatter.statix]
+command = "statix"
+options = [
+  "check",
+]
+includes = [
+  "*.nix",
+]
+
+[formatter.toml-sort]
+command = "toml-sort"
+options = [
+  "--in-place",
+  "--trailing-comma-inline-array",
+]
+includes = [
+  "*.toml",
+]
+
+[formatter.yamlfmt]
+command = "yamlfmt"
+includes = [
+  "*.yaml",
+  "*.yml",
+]
+
+[formatter.yamllint]
+command = "yamllint"
+includes = [
+  "*.yaml",
+  "*.yml",
+]
+
+[global]
+excludes = [
+  "*.gitignore",
+  "*.lock",
+  ".editorconfig",
+  "LICENSE",
+]
