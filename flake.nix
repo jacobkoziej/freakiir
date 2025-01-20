@@ -30,6 +30,7 @@
             einops
             numpy
             pytest
+            scipy
             torch
           ]
         );
