@@ -5,6 +5,8 @@
 
 import torch
 
+from typing import Optional
+
 from einops import rearrange
 from torch import (
     Tensor,
@@ -49,3 +51,33 @@ def freqz_zpk(
     h = k * polyvalfromroots(h, z) / polyvalfromroots(h, p)
 
     return w, h
+
+
+def unwrap(
+    x: Tensor,
+    *,
+    discontinuity: Optional[float] = None,
+    period: float = 2 * pi,
+    axis: int = -1,
+) -> Tensor:
+    if discontinuity is None:
+        discontinuity = period / 2
+
+    high: float = period / 2
+    low: float = -high
+
+    correction_slice = [slice(None, None)] * x.ndim
+
+    correction_slice[axis] = slice(1, None)
+
+    correction_slice = tuple(correction_slice)
+
+    dd = torch.diff(x, axis=axis)
+    ddmod = torch.remainder(dd - low, period) + low
+
+    ph_correct = ddmod - dd
+    ph_correct = torch.where(dd.abs() < discontinuity, 0, ph_correct)
+
+    x[correction_slice] = x[correction_slice] + ph_correct.cumsum(axis)
+
+    return x

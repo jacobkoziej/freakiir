@@ -7,14 +7,21 @@ import numpy as np
 import pytest
 import torch
 
-from typing import Final
+from typing import (
+    Final,
+    Optional,
+)
 
 from scipy import signal
-from torch import Tensor
+from torch import (
+    Tensor,
+    pi,
+)
 
 from freakiir.dsp import (
     flatten_sections,
     freqz_zpk,
+    unwrap,
 )
 
 
@@ -108,3 +115,40 @@ def test_freqz_zpk(
 
         assert np.allclose(w_scipy, w, rtol=RTOL, atol=ATOL)
         assert np.allclose(h_scipy, h, rtol=RTOL, atol=ATOL)
+
+
+@pytest.mark.parametrize(
+    "discontinuity, period, axis",
+    [
+        (pi / 1, 2 * pi, -1),
+        (pi / 2, 2 * pi, -1),
+        (pi / 4, 1 * pi, -1),
+        (pi / 4, 1 * pi, -2),
+    ],
+)
+def test_unwrap(
+    z: Tensor,
+    p: Tensor,
+    k: Tensor,
+    discontinuity: Optional[float],
+    period: float,
+    axis: int,
+) -> None:
+    _, h = freqz_zpk(z, p, k)
+
+    phase = h.angle()
+
+    assert np.allclose(
+        np.unwrap(
+            phase.numpy(),
+            discont=discontinuity,
+            period=period,
+            axis=axis,
+        ),
+        unwrap(
+            phase,
+            discontinuity=discontinuity,
+            period=period,
+            axis=axis,
+        ).numpy(),
+    )
