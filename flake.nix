@@ -28,6 +28,7 @@
         python3-pkgs = python3.withPackages (
           python-pkgs: with python-pkgs; [
             einops
+            ipython
             numpy
             pytest
             scipy
