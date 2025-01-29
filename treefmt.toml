@@ -1,18 +1,11 @@
 [formatter.black]
 command = "black"
-options = [
-  "--line-length=79",
-]
 includes = [
   "*.py",
 ]
 
 [formatter.mdformat]
 command = "mdformat"
-options = [
-  "--number",
-  "--wrap=72",
-]
 includes = [
   "*.md",
 ]
@@ -39,9 +32,6 @@ includes = [
 command = "shfmt"
 options = [
   "--write",
-  "--binary-next-line",
-  "--space-redirects",
-  "--func-next-line",
 ]
 includes = [
   "*.sh",
@@ -59,10 +49,6 @@ includes = [
 
 [formatter.toml-sort]
 command = "toml-sort"
-options = [
-  "--in-place",
-  "--trailing-comma-inline-array",
-]
 includes = [
   "*.toml",
 ]

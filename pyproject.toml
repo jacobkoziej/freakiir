@@ -1,2 +1,12 @@
+[tool.black]
+line-length = 79
+
 [tool.pytest.ini_options]
 pythonpath = ['.']
+
+[tool.ruff]
+line-length = 79
+
+[tool.tomlsort]
+in_place = true
+trailing_comma_inline_array = true
