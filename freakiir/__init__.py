@@ -3,6 +3,12 @@
 # __init__.py -- freakiir
 # Copyright (C) 2025  Jacob Koziej <jacobkoziej@gmail.com>
 
-from . import dsp
+from . import (
+    dsp,
+    pdf,
+)
 
-__all__ = ["dsp"]
+__all__ = [
+    "dsp",
+    "pdf",
+]
