@@ -53,6 +53,17 @@ def freqz_zpk(
     return w, h
 
 
+def order_sections(
+    x: Tensor,
+    *,
+    down_order: bool = False,
+    dim: int = -1,
+) -> Tensor:
+    indices = torch.argsort(x.abs(), descending=down_order, dim=dim)
+
+    return torch.take_along_dim(x, indices, dim=dim)
+
+
 def unwrap(
     x: Tensor,
     *,

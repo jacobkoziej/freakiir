@@ -21,6 +21,7 @@ from torch import (
 from freakiir.dsp import (
     flatten_sections,
     freqz_zpk,
+    order_sections,
     unwrap,
 )
 
@@ -115,6 +116,37 @@ def test_freqz_zpk(
 
         assert np.allclose(w_scipy, w, rtol=RTOL, atol=ATOL)
         assert np.allclose(h_scipy, h, rtol=RTOL, atol=ATOL)
+
+
+@pytest.mark.parametrize(
+    "down_order, dim",
+    [
+        (False, -1),
+        (False, -2),
+        (True, -1),
+        (True, -2),
+    ],
+)
+def test_order_sections(
+    z: Tensor,
+    p: Tensor,
+    down_order: bool,
+    dim: int,
+) -> None:
+    for x in [z, p]:
+        ordered = order_sections(x, down_order=down_order, dim=dim)
+
+        x = x.abs().numpy()
+
+        indices = np.argsort(x, axis=dim)
+
+        if down_order:
+            indices = np.flip(indices, axis=dim)
+
+        assert np.allclose(
+            ordered.abs().numpy(),
+            np.take_along_axis(x, indices, axis=dim),
+        )
 
 
 @pytest.mark.parametrize(
