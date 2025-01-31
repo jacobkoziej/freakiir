@@ -69,7 +69,7 @@ def unwrap(
     *,
     discontinuity: Optional[float] = None,
     period: float = 2 * pi,
-    axis: int = -1,
+    dim: int = -1,
 ) -> Tensor:
     if discontinuity is None:
         discontinuity = period / 2
@@ -79,16 +79,16 @@ def unwrap(
 
     correction_slice = [slice(None, None)] * x.ndim
 
-    correction_slice[axis] = slice(1, None)
+    correction_slice[dim] = slice(1, None)
 
     correction_slice = tuple(correction_slice)
 
-    dd = torch.diff(x, axis=axis)
+    dd = torch.diff(x, dim=dim)
     ddmod = torch.remainder(dd - low, period) + low
 
     ph_correct = ddmod - dd
     ph_correct = torch.where(dd.abs() < discontinuity, 0, ph_correct)
 
-    x[correction_slice] = x[correction_slice] + ph_correct.cumsum(axis)
+    x[correction_slice] = x[correction_slice] + ph_correct.cumsum(dim)
 
     return x

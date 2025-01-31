@@ -150,7 +150,7 @@ def test_order_sections(
 
 
 @pytest.mark.parametrize(
-    "discontinuity, period, axis",
+    "discontinuity, period, dim",
     [
         (pi / 1, 2 * pi, -1),
         (pi / 2, 2 * pi, -1),
@@ -164,7 +164,7 @@ def test_unwrap(
     k: Tensor,
     discontinuity: Optional[float],
     period: float,
-    axis: int,
+    dim: int,
 ) -> None:
     _, h = freqz_zpk(z, p, k)
 
@@ -175,12 +175,12 @@ def test_unwrap(
             phase.numpy(),
             discont=discontinuity,
             period=period,
-            axis=axis,
+            axis=dim,
         ),
         unwrap(
             phase,
             discontinuity=discontinuity,
             period=period,
-            axis=axis,
+            dim=dim,
         ).numpy(),
     )
