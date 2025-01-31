@@ -73,18 +73,18 @@ def freqz_zpk(
 
 
 def order_sections(
-    x: Tensor,
+    h: Tensor,
     *,
     down_order: bool = False,
     dim: int = -1,
 ) -> Tensor:
-    indices = torch.argsort(x.abs(), descending=down_order, dim=dim)
+    indices = torch.argsort(h.abs(), descending=down_order, dim=dim)
 
-    return torch.take_along_dim(x, indices, dim=dim)
+    return torch.take_along_dim(h, indices, dim=dim)
 
 
 def unwrap(
-    x: Tensor,
+    h: Tensor,
     *,
     discontinuity: Optional[float] = None,
     period: float = 2 * pi,
@@ -96,18 +96,18 @@ def unwrap(
     high: float = period / 2
     low: float = -high
 
-    correction_slice = [slice(None, None)] * x.ndim
+    correction_slice = [slice(None, None)] * h.ndim
 
     correction_slice[dim] = slice(1, None)
 
     correction_slice = tuple(correction_slice)
 
-    dd = torch.diff(x, dim=dim)
+    dd = torch.diff(h, dim=dim)
     ddmod = torch.remainder(dd - low, period) + low
 
     ph_correct = ddmod - dd
     ph_correct = torch.where(dd.abs() < discontinuity, 0, ph_correct)
 
-    x[correction_slice] = x[correction_slice] + ph_correct.cumsum(dim)
+    h[correction_slice] = h[correction_slice] + ph_correct.cumsum(dim)
 
-    return x
+    return h

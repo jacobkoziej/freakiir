@@ -157,19 +157,19 @@ def test_order_sections(
     down_order: bool,
     dim: int,
 ) -> None:
-    for x in [z, p]:
-        ordered = order_sections(x, down_order=down_order, dim=dim)
+    for h in [z, p]:
+        ordered = order_sections(h, down_order=down_order, dim=dim)
 
-        x = x.abs().numpy()
+        h = h.abs().numpy()
 
-        indices = np.argsort(x, axis=dim)
+        indices = np.argsort(h, axis=dim)
 
         if down_order:
             indices = np.flip(indices, axis=dim)
 
         assert np.allclose(
             ordered.abs().numpy(),
-            np.take_along_axis(x, indices, axis=dim),
+            np.take_along_axis(h, indices, axis=dim),
         )
 
 
