@@ -98,12 +98,13 @@ def test_construct_sections(
         assert torch.allclose(h, h_out)
 
 
-def test_flatten_sections(z: Tensor) -> None:
-    z_flat = flatten_sections(z)
-    z_flat_baseline = torch.flatten(z, start_dim=-2, end_dim=-1)
+def test_flatten_sections(z: Tensor, p: Tensor) -> None:
+    for h in [z, p]:
+        h_flat = flatten_sections(h)
+        h_flat_baseline = torch.flatten(h, start_dim=-2, end_dim=-1)
 
-    assert z_flat.shape == z_flat_baseline.shape
-    assert (z_flat == z_flat_baseline).all()
+        assert h_flat.shape == h_flat_baseline.shape
+        assert (h_flat == h_flat_baseline).all()
 
 
 @pytest.mark.parametrize(
