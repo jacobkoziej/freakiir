@@ -14,6 +14,25 @@ from torch import (
 )
 
 
+def construct_sections(
+    h: Tensor,
+    sections: int,
+    *,
+    conjugate_pairs: bool = False,
+) -> Tensor:
+    h = rearrange(
+        h,
+        "... (sections h) -> ... sections h",
+        sections=sections,
+        h=1 if conjugate_pairs else 2,
+    )
+
+    if conjugate_pairs:
+        h = torch.cat([h, h.conj()], dim=-1)
+
+    return h
+
+
 def flatten_sections(h: Tensor) -> Tensor:
     return rearrange(h, "... sections h -> ... (sections h)")
 

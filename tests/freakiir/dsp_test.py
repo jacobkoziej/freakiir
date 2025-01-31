@@ -19,6 +19,7 @@ from torch import (
 )
 
 from freakiir.dsp import (
+    construct_sections,
     flatten_sections,
     freqz_zpk,
     order_sections,
@@ -73,6 +74,28 @@ def p() -> Tensor:
 @pytest.fixture
 def k() -> Tensor:
     return torch.tensor([0.53, 0.52])
+
+
+@pytest.mark.parametrize("conjugate_pairs", [False, True])
+def test_construct_sections(
+    z: Tensor,
+    p: Tensor,
+    conjugate_pairs: bool,
+) -> None:
+    for h in [z, p]:
+        sections = h.shape[-2]
+
+        h_in = h[..., :1] if conjugate_pairs else h
+
+        h_in = flatten_sections(h_in)
+
+        h_out = construct_sections(
+            h_in,
+            sections,
+            conjugate_pairs=conjugate_pairs,
+        )
+
+        assert torch.allclose(h, h_out)
 
 
 def test_flatten_sections(z: Tensor) -> None:
