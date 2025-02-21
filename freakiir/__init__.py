@@ -6,11 +6,13 @@
 from . import (
     dataset,
     dsp,
+    layer,
     pdf,
 )
 
 __all__ = [
     "dataset",
     "dsp",
+    "layer",
     "pdf",
 ]
