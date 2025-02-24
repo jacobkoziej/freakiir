@@ -3,11 +3,17 @@
 # layer.py -- model layers
 # Copyright (C) 2025  Jacob Koziej <jacobkoziej@gmail.com>
 
+import torch
 import torch.nn as nn
 
 from dataclasses import dataclass
 
 from torch import Tensor
+
+
+class ComplexToReal(nn.Module):
+    def forward(self, x: Tensor) -> Tensor:
+        return torch.view_as_real(x)
 
 
 @dataclass

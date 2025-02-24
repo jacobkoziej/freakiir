@@ -8,11 +8,55 @@ import torch
 import torch.nn as nn
 
 from _pytest.fixtures import SubRequest
+from torch import Tensor
 
 from freakiir.layer import (
+    ComplexToReal,
     Mlp,
     MlpConfig,
 )
+
+
+class TestComplexToReal:
+    @pytest.fixture(autouse=True)
+    def layer(self) -> None:
+        self.layer = ComplexToReal()
+
+    @pytest.mark.parametrize(
+        "z, r",
+        [
+            (
+                torch.tensor(1.0 + 1.0j),
+                torch.tensor([1.0, 1.0]),
+            ),
+            (
+                torch.tensor([1.0 + 1.0j]),
+                torch.tensor([[1.0, 1.0]]),
+            ),
+            (
+                torch.tensor(
+                    [
+                        [1.0 + 1.0j, 2.0 - 2.0j],
+                        [3.0 - 3.0j, 4.0 + 4.0j],
+                    ]
+                ),
+                torch.tensor(
+                    [
+                        [
+                            [1.0, 1.0],
+                            [2.0, -2.0],
+                        ],
+                        [
+                            [3.0, -3.0],
+                            [4.0, 4.0],
+                        ],
+                    ]
+                ),
+            ),
+        ],
+    )
+    def test_forward(self, z: Tensor, r: Tensor) -> None:
+        assert torch.allclose(self.layer(z), r)
 
 
 class TestMlpConfig:
