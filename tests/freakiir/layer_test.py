@@ -14,6 +14,7 @@ from freakiir.layer import (
     ComplexToReal,
     Mlp,
     MlpConfig,
+    RealToComplex,
 )
 
 
@@ -175,3 +176,45 @@ class TestMlp:
         x = mlp.forward(x)
 
         assert x.shape == (config.out_features,)
+
+
+class TestRealToComplex:
+    @pytest.fixture(autouse=True)
+    def layer(self) -> None:
+        self.layer = RealToComplex()
+
+    @pytest.mark.parametrize(
+        "r, z",
+        [
+            (
+                torch.tensor([1.0, 1.0]),
+                torch.tensor(1.0 + 1.0j),
+            ),
+            (
+                torch.tensor([[1.0, 1.0]]),
+                torch.tensor([1.0 + 1.0j]),
+            ),
+            (
+                torch.tensor(
+                    [
+                        [
+                            [1.0, 1.0],
+                            [2.0, -2.0],
+                        ],
+                        [
+                            [3.0, -3.0],
+                            [4.0, 4.0],
+                        ],
+                    ]
+                ),
+                torch.tensor(
+                    [
+                        [1.0 + 1.0j, 2.0 - 2.0j],
+                        [3.0 - 3.0j, 4.0 + 4.0j],
+                    ]
+                ),
+            ),
+        ],
+    )
+    def test_forward(self, r: Tensor, z: Tensor) -> None:
+        assert torch.allclose(self.layer(r), z)

@@ -63,3 +63,8 @@ class Mlp(nn.Module):
         x = self.out_layer(x)
 
         return x
+
+
+class RealToComplex(nn.Module):
+    def forward(self, x: Tensor) -> Tensor:
+        return torch.view_as_complex(x)
