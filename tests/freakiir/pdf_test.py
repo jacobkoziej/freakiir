@@ -8,7 +8,7 @@ import torch
 
 from typing import Optional
 
-from _pytest.fixtures import SubRequest
+from pytest import FixtureRequest
 from torch import (
     Generator,
     pi,
@@ -18,7 +18,7 @@ from freakiir.pdf import uniform
 
 
 @pytest.fixture(params=[None, torch.float32, torch.float64])
-def dtype(request: SubRequest) -> Optional[torch.dtype]:
+def dtype(request: FixtureRequest) -> Optional[torch.dtype]:
     return request.param
 
 

@@ -6,7 +6,7 @@
 import pytest
 import torch
 
-from _pytest.fixtures import SubRequest
+from pytest import FixtureRequest
 from torch import (
     Tensor,
     pi,
@@ -24,19 +24,19 @@ from freakiir.dsp import (
 
 class TestRandomFilterDatasetConfig:
     @pytest.fixture(params=[-1, 0, 1])
-    def sections(self, request: SubRequest) -> int:
+    def sections(self, request: FixtureRequest) -> int:
         return request.param
 
     @pytest.fixture(params=[-1, 0, 1])
-    def batch_count(self, request: SubRequest) -> int:
+    def batch_count(self, request: FixtureRequest) -> int:
         return request.param
 
     @pytest.fixture(params=[-1, 0, 1])
-    def batch_size(self, request: SubRequest) -> int:
+    def batch_size(self, request: FixtureRequest) -> int:
         return request.param
 
     @pytest.fixture(params=[-1, 0, 1])
-    def dft_bins(self, request: SubRequest) -> int:
+    def dft_bins(self, request: FixtureRequest) -> int:
         return request.param
 
     def test_post_init_assert(
@@ -71,31 +71,31 @@ class TestRandomFilterDatasetConfig:
 
 class TestRandomFilterDataset:
     @pytest.fixture(params=[1, 2, 3, 4])
-    def sections(self, request: SubRequest) -> int:
+    def sections(self, request: FixtureRequest) -> int:
         return request.param
 
     @pytest.fixture(params=[False, True])
-    def all_pass(self, request: SubRequest) -> bool:
+    def all_pass(self, request: FixtureRequest) -> bool:
         return request.param
 
     @pytest.fixture(params=[1024, 3])
-    def batch_count(self, request: SubRequest) -> int:
+    def batch_count(self, request: FixtureRequest) -> int:
         return request.param
 
     @pytest.fixture(params=[16, 7])
-    def batch_size(self, request: SubRequest) -> int:
+    def batch_size(self, request: FixtureRequest) -> int:
         return request.param
 
     @pytest.fixture(params=[512, 43])
-    def dft_bins(self, request: SubRequest) -> int:
+    def dft_bins(self, request: FixtureRequest) -> int:
         return request.param
 
     @pytest.fixture(params=[False, True])
-    def down_order(self, request: SubRequest) -> bool:
+    def down_order(self, request: FixtureRequest) -> bool:
         return request.param
 
     @pytest.fixture(params=[False, True])
-    def whole_dft(self, request: SubRequest) -> bool:
+    def whole_dft(self, request: FixtureRequest) -> bool:
         return request.param
 
     @pytest.fixture(autouse=True)

@@ -7,7 +7,7 @@ import pytest
 import torch
 import torch.nn as nn
 
-from _pytest.fixtures import SubRequest
+from pytest import FixtureRequest
 from torch import Tensor
 
 from freakiir.layer import (
@@ -62,19 +62,19 @@ class TestComplexToReal:
 
 class TestMlpConfig:
     @pytest.fixture(params=[-1, 0, 1])
-    def in_features(self, request: SubRequest) -> int:
+    def in_features(self, request: FixtureRequest) -> int:
         return request.param
 
     @pytest.fixture(params=[-1, 0, 1])
-    def hidden_features(self, request: SubRequest) -> int:
+    def hidden_features(self, request: FixtureRequest) -> int:
         return request.param
 
     @pytest.fixture(params=[-1, 0, 1])
-    def out_features(self, request: SubRequest) -> int:
+    def out_features(self, request: FixtureRequest) -> int:
         return request.param
 
     @pytest.fixture(params=[-1, 0, 1])
-    def hidden_layers(self, request: SubRequest) -> int:
+    def hidden_layers(self, request: FixtureRequest) -> int:
         return request.param
 
     def test_post_init_assert(
@@ -106,19 +106,19 @@ class TestMlpConfig:
 
 class TestMlp:
     @pytest.fixture(params=[2, 8])
-    def in_features(self, request: SubRequest) -> int:
+    def in_features(self, request: FixtureRequest) -> int:
         return request.param
 
     @pytest.fixture(params=[4, 3])
-    def hidden_features(self, request: SubRequest) -> int:
+    def hidden_features(self, request: FixtureRequest) -> int:
         return request.param
 
     @pytest.fixture(params=[8, 2])
-    def out_features(self, request: SubRequest) -> int:
+    def out_features(self, request: FixtureRequest) -> int:
         return request.param
 
     @pytest.fixture(params=[1, 2])
-    def hidden_layers(self, request: SubRequest) -> int:
+    def hidden_layers(self, request: FixtureRequest) -> int:
         return request.param
 
     @pytest.fixture(autouse=True)
