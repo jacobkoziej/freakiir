@@ -31,6 +31,7 @@
             ipython
             numpy
             pytest
+            pytorch-lightning
             scipy
             torch
           ]
