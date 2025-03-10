@@ -68,3 +68,13 @@ class Mlp(nn.Module):
 class RealToComplex(nn.Module):
     def forward(self, x: Tensor) -> Tensor:
         return torch.view_as_complex(x)
+
+
+class ReflectIntoComplexUnitCircle(nn.Module):
+    def forward(self, x: Tensor) -> Tensor:
+        r = x.abs()
+        theta = x.angle()
+
+        r = torch.where(r <= 1, r, 1 / r)
+
+        return r * torch.exp(1j * theta)

@@ -8,14 +8,20 @@ import torch
 import torch.nn as nn
 
 from pytest import FixtureRequest
-from torch import Tensor
+from torch import (
+    Generator,
+    Tensor,
+    pi,
+)
 
 from freakiir.layer import (
     ComplexToReal,
     Mlp,
     MlpConfig,
     RealToComplex,
+    ReflectIntoComplexUnitCircle,
 )
+from freakiir.pdf import uniform
 
 
 class TestComplexToReal:
@@ -218,3 +224,26 @@ class TestRealToComplex:
     )
     def test_forward(self, r: Tensor, z: Tensor) -> None:
         assert torch.allclose(self.layer(r), z)
+
+
+class TestReflectIntoComplexUnitCircle:
+    def test_forward(
+        self,
+        generator: Generator,
+        samples: int,
+    ) -> None:
+        pdf = uniform(
+            r_a=0,
+            r_b=2,
+            theta_a=0,
+            theta_b=pi,
+            generator=generator,
+        )
+
+        samples = pdf(samples)
+
+        layer = ReflectIntoComplexUnitCircle()
+
+        inside = layer.forward(samples)
+
+        assert torch.all(inside.abs() <= 1)
