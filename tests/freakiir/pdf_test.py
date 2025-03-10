@@ -6,10 +6,7 @@
 import pytest
 import torch
 
-from typing import (
-    Final,
-    Optional,
-)
+from typing import Optional
 
 from _pytest.fixtures import SubRequest
 from torch import (
@@ -20,18 +17,9 @@ from torch import (
 from freakiir.pdf import uniform
 
 
-SAMPLES: Final[int] = 1 << 12
-SEED: Final[int] = 0xF14CE2E4
-
-
 @pytest.fixture(params=[None, torch.float32, torch.float64])
 def dtype(request: SubRequest) -> Optional[torch.dtype]:
     return request.param
-
-
-@pytest.fixture
-def generator() -> Generator:
-    return Generator().manual_seed(SEED)
 
 
 @pytest.mark.parametrize(
@@ -48,6 +36,7 @@ def test_uniform(
     theta_b: float,
     dtype: torch.dtype,
     generator: Generator,
+    samples: int,
 ) -> None:
     pdf = uniform(
         r_a=r_a,
@@ -58,7 +47,7 @@ def test_uniform(
         generator=generator,
     )
 
-    samples = pdf(SAMPLES)
+    samples = pdf(samples)
 
     if dtype is None:
         dtype = torch.get_default_dtype()
