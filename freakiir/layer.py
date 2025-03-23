@@ -16,7 +16,7 @@ class ComplexToReal(nn.Module):
         return torch.view_as_real(x)
 
 
-@dataclass
+@dataclass(frozen=True)
 class MlpConfig:
     in_features: int
     hidden_features: int

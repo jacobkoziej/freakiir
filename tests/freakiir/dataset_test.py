@@ -6,6 +6,8 @@
 import pytest
 import torch
 
+from dataclasses import replace
+
 from pytest import FixtureRequest
 from torch import (
     Tensor,
@@ -124,7 +126,7 @@ class TestRandomFilterDataset:
     def test_getitem_all_pass(self, all_pass: bool) -> None:
         config = self.config
 
-        config.all_pass = all_pass
+        config = replace(config, all_pass=all_pass)
 
         dataset = RandomFilterDataset(config)
 
@@ -138,8 +140,7 @@ class TestRandomFilterDataset:
     def test_getitem_dft(self, dft_bins: int, whole_dft: bool) -> None:
         config = self.config
 
-        config.dft_bins = dft_bins
-        config.whole_dft = whole_dft
+        config = replace(config, dft_bins=dft_bins, whole_dft=whole_dft)
 
         dataset = RandomFilterDataset(config)
 
@@ -159,7 +160,7 @@ class TestRandomFilterDataset:
     def test_getitem_down_order(self, down_order: bool) -> None:
         config = self.config
 
-        config.down_order = down_order
+        config = replace(config, down_order=down_order)
 
         dataset = RandomFilterDataset(config)
 
@@ -190,7 +191,7 @@ class TestRandomFilterDataset:
     ) -> None:
         config = self.config
 
-        config.dft_bins = dft_bins
+        config = replace(config, dft_bins=dft_bins)
 
         dataset = RandomFilterDataset(config)
 
@@ -211,8 +212,11 @@ class TestRandomFilterDataset:
     def test_len(self, batch_count: int, batch_size: int) -> None:
         config = self.config
 
-        config.batch_count = batch_count
-        config.batch_size = batch_size
+        config = replace(
+            config,
+            batch_count=batch_count,
+            batch_size=batch_size,
+        )
 
         dataset = RandomFilterDataset(config)
 

@@ -22,7 +22,7 @@ from .dsp import (
 from .pdf import Pdf
 
 
-@dataclass
+@dataclass(frozen=True)
 class RandomFilterDatasetConfig:
     sections: int
     pdf_z: Pdf
@@ -43,7 +43,7 @@ class RandomFilterDatasetConfig:
         assert self.dft_bins > 0
 
 
-@dataclass
+@dataclass(frozen=True)
 class RandomFilterDatasetOutput:
     w: Tensor
     h: Tensor
