@@ -10,12 +10,12 @@ from torch import Tensor
 
 @dataclass(frozen=True, kw_only=True)
 class ModelInput:
+    w: Tensor
     h: Tensor
 
 
 @dataclass(frozen=True, kw_only=True)
 class ModelOutput:
-    w: Tensor
     z: Tensor
     p: Tensor
     k: Tensor
