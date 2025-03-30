@@ -11,13 +11,16 @@ from dataclasses import dataclass
 from typing import Optional
 
 from einops import rearrange
-from torch import Tensor
 from torch.utils.data import Dataset
 
 from .dsp import (
     construct_sections,
     freqz_zpk,
     order_sections,
+)
+from .model import (
+    ModelInput,
+    ModelOutput,
 )
 from .pdf import Pdf
 
@@ -43,13 +46,9 @@ class RandomFilterDatasetConfig:
         assert self.dft_bins > 0
 
 
-@dataclass(frozen=True)
-class RandomFilterDatasetOutput:
-    w: Tensor
-    h: Tensor
-    z: Tensor
-    p: Tensor
-    k: Tensor
+@dataclass(frozen=True, kw_only=True)
+class RandomFilterDatasetOutput(ModelInput, ModelOutput):
+    pass
 
 
 class RandomFilterDataset(Dataset):
@@ -125,7 +124,7 @@ class RandomFilterDataset(Dataset):
 
         w, h = freqz_zpk(z, p, k, N=config.dft_bins, whole=config.whole_dft)
 
-        return RandomFilterDatasetOutput(w, h, z, p, k)
+        return RandomFilterDatasetOutput(h=h, w=w, z=z, p=p, k=k)
 
     def __len__(self) -> int:
         config = self.config

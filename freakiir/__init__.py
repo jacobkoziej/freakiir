@@ -7,6 +7,7 @@ from . import (
     dataset,
     dsp,
     layer,
+    model,
     pdf,
 )
 
@@ -14,5 +15,6 @@ __all__ = [
     "dataset",
     "dsp",
     "layer",
+    "model",
     "pdf",
 ]
