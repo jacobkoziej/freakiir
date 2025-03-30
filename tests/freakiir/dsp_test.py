@@ -4,6 +4,7 @@
 # Copyright (C) 2025  Jacob Koziej <jacobkoziej@gmail.com>
 
 import numpy as np
+import numpy.polynomial as polynomial
 import pytest
 import torch
 
@@ -12,6 +13,7 @@ from typing import (
     Optional,
 )
 
+from einops import rearrange
 from scipy import signal
 from torch import (
     Tensor,
@@ -23,6 +25,7 @@ from freakiir.dsp import (
     flatten_sections,
     freqz_zpk,
     order_sections,
+    polyvalfromroots,
     unwrap,
 )
 
@@ -171,6 +174,17 @@ def test_order_sections(
             ordered.abs().numpy(),
             np.take_along_axis(h, indices, axis=dim),
         )
+
+
+def test_polyvalfromroots(z: Tensor) -> None:
+    x = torch.linspace(-100, 100, 512)
+
+    output = polyvalfromroots(x, z)
+
+    np_output = polynomial.polynomial.polyvalfromroots(x.numpy(), z.numpy().T)
+    np_output = rearrange(np_output, "p n ... -> n p ...")
+
+    assert np.allclose(output.numpy(), np_output)
 
 
 @pytest.mark.parametrize(

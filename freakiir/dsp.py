@@ -52,11 +52,6 @@ def freqz_zpk(
     assert p.device == device
     assert k.device == device
 
-    def polyvalfromroots(x: Tensor, r: Tensor) -> Tensor:
-        r = r.reshape(r.shape + (1,) * x.ndim)
-
-        return torch.prod(x - r, -2)
-
     k = k.reshape(k.shape + (1,) * (z.ndim - 1))
 
     end = (2 if whole else 1) * pi
@@ -81,6 +76,12 @@ def order_sections(
     indices = torch.argsort(h.abs(), descending=down_order, dim=dim)
 
     return torch.take_along_dim(h, indices, dim=dim)
+
+
+def polyvalfromroots(x: Tensor, r: Tensor) -> Tensor:
+    r = r.reshape(r.shape + (1,) * x.ndim)
+
+    return torch.prod(x - r, -2)
 
 
 def unwrap(
