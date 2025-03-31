@@ -3,8 +3,16 @@
 # path.py -- path related functionality
 # Copyright (C) 2025  Jacob Koziej <jacobkoziej@gmail.com>
 
+from hashlib import blake2b
+from mmap import (
+    ACCESS_READ,
+    mmap,
+)
 from pathlib import Path
-from typing import Final
+from typing import (
+    Final,
+    Optional,
+)
 
 from platformdirs import user_cache_dir
 
@@ -23,3 +31,17 @@ def datasets_directory() -> Path:
     directory.mkdir(parents=True, exist_ok=True)
 
     return directory
+
+
+def file_hash(path: Path | str) -> Optional[str]:
+    if isinstance(path, str):
+        path = Path(path)
+
+    if not path.is_file():
+        return None
+
+    if not path.stat().st_size:
+        return None
+
+    with open(path) as fp, mmap(fp.fileno(), 0, access=ACCESS_READ) as fp:
+        return blake2b(fp).hexdigest()
