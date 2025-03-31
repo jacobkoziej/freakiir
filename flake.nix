@@ -30,6 +30,7 @@
             einops
             ipython
             numpy
+            platformdirs
             pytest
             pytorch-lightning
             scipy
