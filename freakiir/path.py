@@ -15,3 +15,11 @@ _APP_NAME: Final[str] = "freakiir"
 
 def cache_directory() -> Path:
     return Path(user_cache_dir(_APP_NAME, _APP_AUTHOR, ensure_exists=True))
+
+
+def datasets_directory() -> Path:
+    directory = cache_directory() / "datasets"
+
+    directory.mkdir(parents=True, exist_ok=True)
+
+    return directory
