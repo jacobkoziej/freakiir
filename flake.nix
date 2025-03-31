@@ -55,7 +55,7 @@
               shfmt
               statix
               toml-sort
-              treefmt2
+              treefmt
               yamlfmt
               yamllint
             ];
