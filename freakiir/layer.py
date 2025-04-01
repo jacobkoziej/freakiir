@@ -22,6 +22,31 @@ class ComplexToReal(nn.Module):
         return torch.view_as_real(x)
 
 
+class ConstructAllPassSections(nn.Module):
+    def __init__(self, sections: int, down_order: bool):
+        super().__init__()
+
+        self.sections = sections
+        self.down_order = down_order
+
+    def forward(self, x: Tensor) -> Tensor:
+        sections = self.sections
+        down_order = self.down_order
+
+        p = order_sections(x, down_order=down_order)
+
+        r = p.abs()
+        theta = p.angle()
+
+        z = (1 / r) * torch.exp(1j * theta)
+
+        z = construct_sections(z, sections, conjugate_pairs=True)
+        p = construct_sections(p, sections, conjugate_pairs=True)
+        k = (torch.norm(p, dim=-1) / torch.norm(z, dim=-1)).squeeze()
+
+        return z, p, k
+
+
 class ConstructMinimumPhaseSections(nn.Module):
     def __init__(self, sections: int, down_order: bool):
         super().__init__()
