@@ -339,7 +339,7 @@ class RandomFilterDataset(Dataset):
         k = (
             (torch.norm(p, dim=-1) / torch.norm(z, dim=-1)).squeeze()
             if config.all_pass
-            else torch.tensor(1, dtype=z.real.dtype)
+            else torch.ones(z.shape[:-1], dtype=z.real.dtype)
         )
 
         w, h = freqz_zpk(z, p, k, N=config.dft_bins, whole=config.whole_dft)
