@@ -14,6 +14,7 @@ from torch import Tensor
 from .dsp import (
     construct_sections,
     order_sections,
+    unwrap,
 )
 
 
@@ -134,3 +135,8 @@ class ReflectIntoComplexUnitCircle(nn.Module):
         r = torch.where(r <= 1, r, 1 / r)
 
         return r * torch.exp(1j * theta)
+
+
+class UnwrapPhase(nn.Module):
+    def forward(self, x: Tensor) -> Tensor:
+        return unwrap(x.angle())
