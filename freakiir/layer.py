@@ -45,8 +45,8 @@ class Mlp(nn.Module):
 
         self.in_layer = gen_layer(config.in_features, config.hidden_features)
 
-        self.hidden_layers = nn.ModuleList(
-            [
+        self.hidden_layers = nn.Sequential(
+            *[
                 gen_layer(config.hidden_features, config.hidden_features)
                 for _ in range(config.hidden_layers)
             ],
@@ -55,12 +55,9 @@ class Mlp(nn.Module):
         self.out_layer = gen_layer(config.hidden_features, config.out_features)
 
     def forward(self, x: Tensor) -> Tensor:
-        x = self.in_layer(x)
-
-        for hidden_layer in self.hidden_layers:
-            x = hidden_layer(x)
-
-        x = self.out_layer(x)
+        x = self.in_layer.forward(x)
+        x = self.hidden_layers.forward(x)
+        x = self.out_layer.forward(x)
 
         return x
 
