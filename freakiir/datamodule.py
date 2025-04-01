@@ -29,7 +29,6 @@ class RandomFilterWithListenHrtf(LightningDataModule):
         self,
         config: RandomFilterDatasetConfig,
         *,
-        batch_size: int = 16,
         num_workers: int = 4,
         split_seed: int = 0x30008AA5
     ) -> None:
@@ -80,7 +79,7 @@ class RandomFilterWithListenHrtf(LightningDataModule):
 
         return DataLoader(
             dataset,
-            batch_size=hparams.batch_size,
+            batch_size=hparams.config.batch_size,
             collate_fn=RandomFilterWithListenHrtf._collate_fn,
             num_workers=num_workers,
         )
