@@ -204,7 +204,7 @@ class ListenHrtf(Dataset):
         self.sampling_hz = 44100
 
         elevation = torch.tensor(np.array(data["elev_v"]))
-        azimuth = torch.tensor(np.array(data["azim_v"]))
+        azimuth = torch.tensor(np.array(data["azim_v"])).to(torch.int16)
         content = torch.tensor(np.array(data["content_m"]), dtype=dtype)
 
         def flatten_position(x: Tensor) -> Tensor:
