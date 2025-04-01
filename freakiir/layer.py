@@ -8,6 +8,7 @@ import torch.nn as nn
 
 from dataclasses import dataclass
 
+from einops import rearrange
 from torch import Tensor
 
 
@@ -64,6 +65,8 @@ class Mlp(nn.Module):
 
 class RealToComplex(nn.Module):
     def forward(self, x: Tensor) -> Tensor:
+        x = rearrange(x, "... (n r) -> ... n r", r=2)
+
         return torch.view_as_complex(x)
 
 
