@@ -17,6 +17,11 @@ class ComplexToReal(nn.Module):
         return torch.view_as_real(x)
 
 
+class DecibelMagnitude(nn.Module):
+    def forward(self, x: Tensor) -> Tensor:
+        return 20 * torch.log10(x.abs())
+
+
 @dataclass(frozen=True)
 class MlpConfig:
     in_features: int
