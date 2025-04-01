@@ -4,6 +4,7 @@
 # Copyright (C) 2025  Jacob Koziej <jacobkoziej@gmail.com>
 
 from . import (
+    datamodule,
     dataset,
     dsp,
     layer,
@@ -13,6 +14,7 @@ from . import (
 )
 
 __all__ = [
+    "datamodule",
     "dataset",
     "dsp",
     "layer",
