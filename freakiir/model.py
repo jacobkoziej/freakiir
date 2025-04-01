@@ -26,6 +26,7 @@ from .layer import (
 )
 
 
+ModelLayer: TypeAlias = nn.Module | nn.modules.container.Sequential
 ModelStepInput: TypeAlias = tuple[Tensor, Tensor]
 
 
@@ -53,7 +54,9 @@ class ModelOutput:
 
 
 class Base(LightningModule, ABC):
-    layers: nn.modules.container.Sequential
+    preprocess: ModelLayer
+    layers: ModelLayer
+    post_process: ModelLayer
 
     def __init__(self) -> None:
         super().__init__()
@@ -100,7 +103,11 @@ class Base(LightningModule, ABC):
         return optimizer
 
     def forward(self, h: Tensor) -> Tensor:
-        z, p, k = self.layers(h)
+        preprocessed = self.preprocess(h)
+
+        raw = self.layers(preprocessed)
+
+        z, p, k = self.post_process(raw)
 
         return z, p, k
 
@@ -132,9 +139,11 @@ class MinimumPhase(Base):
             hidden_layers=config.hidden_layers,
         )
 
-        self.layers = nn.Sequential(
-            DecibelMagnitude(),
-            Mlp(mlp_config),
+        self.preprocess = DecibelMagnitude()
+
+        self.layers = Mlp(mlp_config)
+
+        self.post_process = nn.Sequential(
             RealToComplex(),
             ReflectIntoComplexUnitCircle(),
             ConstructMinimumPhaseSections(config.sections, config.down_order),
