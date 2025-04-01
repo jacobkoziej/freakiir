@@ -11,10 +11,36 @@ from dataclasses import dataclass
 from einops import rearrange
 from torch import Tensor
 
+from .dsp import (
+    construct_sections,
+    order_sections,
+)
+
 
 class ComplexToReal(nn.Module):
     def forward(self, x: Tensor) -> Tensor:
         return torch.view_as_real(x)
+
+
+class ConstructMinimumPhaseSections(nn.Module):
+    def __init__(self, sections: int, down_order: bool):
+        super().__init__()
+
+        self.sections = sections
+        self.down_order = down_order
+
+    def forward(self, x: Tensor) -> Tensor:
+        sections = self.sections
+        down_order = self.down_order
+
+        z = order_sections(x[..., :sections], down_order=down_order)
+        p = order_sections(x[..., sections:], down_order=down_order)
+
+        z = construct_sections(z, sections, conjugate_pairs=True)
+        p = construct_sections(p, sections, conjugate_pairs=True)
+        k = torch.ones(z.shape[:-1], dtype=z.real.dtype)
+
+        return z, p, k
 
 
 class DecibelMagnitude(nn.Module):
