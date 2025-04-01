@@ -6,10 +6,7 @@
 import torch
 
 from pytorch_lightning.core import LightningDataModule
-from torch import (
-    Generator,
-    Tensor,
-)
+from torch import Generator
 from torch.utils.data import (
     DataLoader,
     Dataset,
@@ -21,7 +18,10 @@ from .dataset import (
     RandomFilterDataset,
     RandomFilterDatasetConfig,
 )
-from .model import ModelInput
+from .model import (
+    ModelInput,
+    ModelStepInput,
+)
 
 
 class RandomFilterWithListenHrtf(LightningDataModule):
@@ -59,7 +59,7 @@ class RandomFilterWithListenHrtf(LightningDataModule):
         return self._dataloader(self._val)
 
     @staticmethod
-    def _collate_fn(batch: ModelInput) -> tuple[Tensor, Tensor]:
+    def _collate_fn(batch: ModelInput) -> ModelStepInput:
         w = []
         h = []
 
