@@ -239,7 +239,7 @@ class ListenHrtf(Dataset):
             h=self.h[item],
             elevation=self.elevation[item],
             azimuth=self.azimuth[item],
-            content=self.azimuth[item],
+            content=self.content[item],
             content_type=self.content_type,
             sampling_hz=self.sampling_hz,
         )
