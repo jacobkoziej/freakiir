@@ -217,9 +217,9 @@ class ListenHrtf(Dataset):
         self.azimuth = flatten_position(azimuth)
         self.content = flatten_position(content)
 
-        self.h = torch.fft.rfft(self.content)
+        N = self.content.shape[-1]
 
-        N = self.h.shape[-1]
+        self.h = torch.fft.fft(self.content, n=2 * N)[..., :N]
 
         # our interval is right-open
         end = torch.pi
