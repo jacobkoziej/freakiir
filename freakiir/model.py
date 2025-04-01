@@ -17,12 +17,14 @@ from torch import Tensor
 
 from .dsp import polyvalfromroots
 from .layer import (
+    ConstructAllPassSections,
     ConstructMinimumPhaseSections,
     DecibelMagnitude,
     Mlp,
     MlpConfig,
     RealToComplex,
     ReflectIntoComplexUnitCircle,
+    UnwrapPhase,
 )
 
 
@@ -124,6 +126,30 @@ class Base(LightningModule, ABC):
 
     def validation_step(self, batch: ModelStepInput, batch_idx: int) -> Tensor:
         return self._step(batch, batch_idx, "val")
+
+
+class AllPass(Base):
+    def __init__(self, config: ModelConfig) -> None:
+        super().__init__()
+
+        self.save_hyperparameters()
+
+        mlp_config = MlpConfig(
+            in_features=config.inputs,
+            hidden_features=config.hidden_features,
+            out_features=2 * config.sections,
+            hidden_layers=config.hidden_layers,
+        )
+
+        self.preprocess = UnwrapPhase()
+
+        self.layers = Mlp(mlp_config)
+
+        self.post_process = nn.Sequential(
+            RealToComplex(),
+            ReflectIntoComplexUnitCircle(),
+            ConstructAllPassSections(config.sections, config.down_order),
+        )
 
 
 class MinimumPhase(Base):
