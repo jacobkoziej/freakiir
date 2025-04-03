@@ -1,5 +1,69 @@
+[build-system]
+requires = [
+  'hatch-vcs',
+  'hatchling',
+]
+build-backend = 'hatchling.build'
+
+[project]
+name = 'freakiir'
+description = 'Frequency Response Enhanced by All-pass estimations of Kth order Infinite Impulse Responses'
+readme = 'README.md'
+license = 'MPL-2.0'
+authors = [
+  {name = 'Jacob Koziej', email = 'jacobkoziej@gmail.com'},
+]
+requires-python = '>= 3.12'
+dependencies = [
+  'einops',
+  'numpy',
+  'platformdirs',
+  'pytorch-lightning',
+  'scipy',
+  'torch',
+]
+dynamic = [
+  'version',
+]
+
+[project.optional-dependencies]
+dev = [
+  'pytest',
+]
+
+[project.urls]
+Repository = 'https://github.com/jacobkoziej/freakiir'
+
 [tool.black]
 line-length = 79
+
+[tool.hatch.build]
+artifacts = [
+  'freakiir/_version.py',
+]
+exclude = [
+  '*',
+]
+
+[tool.hatch.build.hooks.vcs]
+version-file = 'freakiir/_version.py'
+
+[tool.hatch.build.targets.sdist]
+include = [
+  'freakiir',
+  'tests',
+]
+exclude = [
+  'freakiir/.gitignore',
+]
+
+[tool.hatch.build.targets.wheel]
+packages = [
+  'freakiir',
+]
+
+[tool.hatch.version]
+source = 'vcs'
 
 [tool.pytest.ini_options]
 pythonpath = ['.']
