@@ -26,16 +26,27 @@
         inherit (pkgs) python3;
 
         python3-pkgs = python3.withPackages (
-          python-pkgs: with python-pkgs; [
-            einops
+          python-pkgs:
+          let
+            freakiir-dependencies =
+              let
+                inherit (lib) importTOML;
+                inherit (lib.attrsets) attrVals;
+
+                pyproject = importTOML ./pyproject.toml;
+
+                inherit (pyproject.project) dependencies;
+                inherit (pyproject.project.optional-dependencies) dev;
+
+              in
+              attrVals (dependencies ++ dev) python-pkgs;
+
+          in
+          with python-pkgs;
+          [
             ipython
-            numpy
-            platformdirs
-            pytest
-            pytorch-lightning
-            scipy
-            torch
           ]
+          ++ freakiir-dependencies
         );
 
       in
