@@ -30,7 +30,7 @@ class RandomFilterWithListenHrtf(LightningDataModule):
         config: RandomFilterDatasetConfig,
         *,
         num_workers: int = 4,
-        split_seed: int = 0x30008AA5
+        split_seed: int = 0x30008AA5,
     ) -> None:
         super().__init__()
 
