@@ -16,6 +16,7 @@ authors = [
 requires-python = '>= 3.12'
 dependencies = [
   'einops',
+  'hydra-core',
   'numpy',
   'platformdirs',
   'pytorch-lightning',
