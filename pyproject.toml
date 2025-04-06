@@ -31,6 +31,9 @@ dev = [
   'pytest',
 ]
 
+[project.scripts]
+freakiir = 'freakiir.__main__:main'
+
 [project.urls]
 Repository = 'https://github.com/jacobkoziej/freakiir'
 
