@@ -73,4 +73,5 @@ excludes = [
   "*.lock",
   ".editorconfig",
   "LICENSE",
+  "outputs/*",
 ]
