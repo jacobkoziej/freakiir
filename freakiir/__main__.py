@@ -3,13 +3,17 @@
 # __main__.py -- main
 # Copyright (C) 2025  Jacob Koziej <jacobkoziej@gmail.com>
 
+import random
 import sys
 
 import hydra
 
 from argparse import ArgumentParser
 
+from hydra.utils import instantiate
 from omegaconf import DictConfig
+
+from freakiir.pdf import Pdf
 
 
 @hydra.main(
@@ -17,7 +21,20 @@ from omegaconf import DictConfig
     config_path="conf",
     version_base="1.2",
 )
-def _train(cfg: DictConfig) -> None: ...
+def _train(cfg: DictConfig) -> None:
+    def pdf(x: DictConfig) -> Pdf:
+        pdfs = list(instantiate(x).values())
+
+        def sample(samples: int):
+            return random.choice(pdfs)(samples)
+
+        return sample
+
+    pdf_z = pdf(cfg.pdf_z)
+    pdf_p = pdf(cfg.pdf_p)
+
+    _ = pdf_z
+    _ = pdf_p
 
 
 def main() -> None:

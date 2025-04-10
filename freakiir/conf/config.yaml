@@ -7,3 +7,11 @@ hydra:
 
   job:
     chdir: true
+
+pdf_z: ${pdf}
+pdf_p: ${pdf}
+
+defaults:
+  - pdf:
+      - uniform
+  - _self_
