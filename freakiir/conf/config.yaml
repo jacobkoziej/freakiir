@@ -1,5 +1,9 @@
 ---
 
 hydra:
+  callbacks:
+    version:
+      _target_: freakiir.hydra.callbacks.Version
+
   job:
     chdir: true
