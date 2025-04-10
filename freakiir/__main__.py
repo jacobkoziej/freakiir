@@ -12,7 +12,11 @@ from argparse import ArgumentParser
 from omegaconf import DictConfig
 
 
-@hydra.main(version_base="1.2")
+@hydra.main(
+    config_name="config",
+    config_path="conf",
+    version_base="1.2",
+)
 def _train(cfg: DictConfig) -> None: ...
 
 
