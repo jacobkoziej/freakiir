@@ -79,9 +79,24 @@ def order_sections(
 
 
 def polyvalfromroots(x: Tensor, r: Tensor) -> Tensor:
-    r = r.reshape(r.shape + (1,) * x.ndim)
+    shape = r.shape[:-1]
 
-    return torch.prod(x - r, -2)
+    if x.ndim == 1:
+        x = x.unsqueeze(0)
+
+    if r.ndim == 1:
+        r = r.unsqueeze(0)
+
+    x = x.flatten(0, -2)
+    r = r.flatten(0, -2)
+
+    x = x.unsqueeze(-1)
+    r = r.unsqueeze(-2)
+
+    vals = torch.prod(x - r, dim=-1)
+    vals = vals.reshape(*shape, -1)
+
+    return vals
 
 
 def unwrap(
