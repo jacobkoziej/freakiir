@@ -39,9 +39,13 @@ def _pdf(*args: list[Any], **kwargs: dict[str, Any]) -> Pdf:
 def _train(cfg: DictConfig) -> None:
     datamodule = instantiate(cfg.datamodule)
     model = instantiate(cfg.model)
+    trainer = instantiate(cfg.trainer)
 
-    _ = datamodule
-    _ = model
+    trainer.fit(
+        model,
+        ckpt_path=cfg.checkpoint.resume,
+        datamodule=datamodule,
+    )
 
 
 def main() -> None:

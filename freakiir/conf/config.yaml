@@ -8,6 +8,10 @@ hydra:
   job:
     chdir: true
 
+checkpoint:
+  dir: checkpoints
+  resume: null
+
 model:
   _target_: freakiir.model.AllPass
   config:
@@ -20,6 +24,13 @@ pdf:
 
 pdf_z: ${pdf}
 pdf_p: ${pdf}
+
+trainer:
+  _target_: pytorch_lightning.Trainer
+  enable_checkpointing: true
+  enable_model_summary: true
+  enable_progress_bar: true
+  max_epochs: -1
 
 defaults:
   - datamodule: random-filter-with-listen-hrtf

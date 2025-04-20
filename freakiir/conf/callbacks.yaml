@@ -1,0 +1,18 @@
+---
+
+callbacks:
+  - _target_: pytorch_lightning.callbacks.DeviceStatsMonitor
+
+  - _target_: pytorch_lightning.callbacks.EarlyStopping
+    check_finite: true
+    min_delta: 0.0
+    mode: min
+    monitor: val/loss
+    patience: 3
+
+  - _target_: pytorch_lightning.callbacks.ModelCheckpoint
+    dirpath: ${checkpoint-path}
+    enable_version_counter: true
+    save_last: link
+    save_on_train_epoch_end: true
+    save_top_k: -1
