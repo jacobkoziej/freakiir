@@ -8,6 +8,9 @@ hydra:
   job:
     chdir: true
 
+pdf:
+  epsilon: 1.0e-6
+
 pdf_z: ${pdf}
 pdf_p: ${pdf}
 

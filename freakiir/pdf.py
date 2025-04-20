@@ -26,13 +26,17 @@ Pdf = NewType("Pdf", Callable[[int], Tensor])
 
 def uniform(
     *,
-    r_a: float = 0.0 + _EPSILON,
-    r_b: float = 1.0 - _EPSILON,
+    r_a: float = 0.0,
+    r_b: float = 1.0,
+    epsilon: float = _EPSILON,
     theta_a: float = 0.0,
     theta_b: float = pi,
     dtype: Optional[dtype] = None,
     generator: Optional[Generator] = None,
 ) -> Pdf:
+    r_a += epsilon
+    r_b -= epsilon
+
     assert r_a <= r_b
     assert theta_a <= theta_b
 

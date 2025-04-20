@@ -24,6 +24,7 @@ from freakiir.pdf import Pdf
 def _train(cfg: DictConfig) -> None:
     def pdf(x: DictConfig) -> Pdf:
         pdfs = list(instantiate(x).values())
+        pdfs = list(filter(callable, pdfs))
 
         def sample(samples: int):
             return random.choice(pdfs)(samples)
