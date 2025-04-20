@@ -38,7 +38,7 @@ from .path import (
 from .pdf import Pdf
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(kw_only=True)
 class ListenHrtfOutput(ModelInput):
     elevation: Tensor
     azimuth: Tensor
@@ -245,7 +245,7 @@ class ListenHrtf(Dataset):
         )
 
 
-@dataclass(frozen=True)
+@dataclass
 class RandomFilterDatasetConfig:
     sections: int
     pdf_z: Pdf
@@ -266,7 +266,7 @@ class RandomFilterDatasetConfig:
         assert self.dft_bins > 0
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(kw_only=True)
 class RandomFilterDatasetOutput(ModelInput, ModelOutput):
     pass
 

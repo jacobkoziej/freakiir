@@ -35,7 +35,7 @@ ModelLayer: TypeAlias = nn.Module | nn.modules.container.Sequential
 ModelStepInput: TypeAlias = tuple[Tensor, Tensor]
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(kw_only=True)
 class ModelConfig:
     inputs: int = 512
     sections: int = 4
@@ -45,13 +45,13 @@ class ModelConfig:
     down_order: bool = False
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(kw_only=True)
 class ModelInput:
     w: Tensor
     h: Tensor
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(kw_only=True)
 class ModelOutput:
     z: Tensor
     p: Tensor

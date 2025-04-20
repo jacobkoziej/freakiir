@@ -74,7 +74,7 @@ class DecibelMagnitude(nn.Module):
         return 20 * torch.log10(x.abs())
 
 
-@dataclass(frozen=True)
+@dataclass
 class MlpConfig:
     in_features: int
     hidden_features: int
