@@ -11,7 +11,10 @@ from abc import ABC
 from dataclasses import dataclass
 from typing import TypeAlias
 
-from einops import reduce
+from einops import (
+    reduce,
+    repeat,
+)
 from pytorch_lightning import LightningModule
 from torch import Tensor
 
@@ -66,14 +69,18 @@ class Base(LightningModule, ABC):
         self.loss = nn.MSELoss()
 
     def _output2prediction(
+        self,
         w: Tensor,
         z: Tensor,
         p: Tensor,
         k: Tensor,
     ) -> Tensor:
-        h = torch.exp(1j * w)
+        sections = self.hparams.config.sections
 
-        h = k * polyvalfromroots(h, z) / polyvalfromroots(h, p)
+        h = torch.exp(1j * w)
+        h = repeat(h, "... w -> ... sections w", sections=sections)
+
+        h = k.unsqueeze(-1) * polyvalfromroots(h, z) / polyvalfromroots(h, p)
         h = reduce(h, "... sections h -> ... h", "prod")
 
         return h
