@@ -27,7 +27,7 @@ from .model import (
 class RandomFilterWithListenHrtf(LightningDataModule):
     def __init__(
         self,
-        config: RandomFilterDatasetConfig,
+        random_filter_dataset_config: RandomFilterDatasetConfig,
         *,
         num_workers: int = 4,
         split_seed: int = 0x30008AA5,
@@ -41,7 +41,9 @@ class RandomFilterWithListenHrtf(LightningDataModule):
         _ = ListenHrtf(decompress=True, download=True)
 
     def setup(self, stage: str) -> None:
-        self._train = RandomFilterDataset(self.hparams.config)
+        config = self.hparams.random_filter_dataset_config
+
+        self._train = RandomFilterDataset(config)
 
         self._val, self._test = random_split(
             ListenHrtf(decompress=False, download=False),
@@ -77,9 +79,11 @@ class RandomFilterWithListenHrtf(LightningDataModule):
         if torch.cuda.is_available():
             num_workers *= torch.cuda.device_count()
 
+        config = hparams.random_filter_dataset_config
+
         return DataLoader(
             dataset,
-            batch_size=hparams.config.batch_size,
+            batch_size=config.batch_size,
             collate_fn=RandomFilterWithListenHrtf._collate_fn,
             num_workers=num_workers,
         )

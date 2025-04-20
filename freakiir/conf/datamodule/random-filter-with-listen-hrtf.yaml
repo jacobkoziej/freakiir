@@ -1,4 +1,4 @@
 ---
 
 _target_: freakiir.datamodule.RandomFilterWithListenHrtf
-config: ${dataset.random-filter}
+random_filter_dataset_config: ${dataset.random-filter}
