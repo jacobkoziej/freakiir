@@ -9,11 +9,26 @@ import sys
 import hydra
 
 from argparse import ArgumentParser
+from typing import Any
 
 from hydra.utils import instantiate
 from omegaconf import DictConfig
 
 from freakiir.pdf import Pdf
+
+
+def _pdf(*args: list[Any], **kwargs: dict[str, Any]) -> Pdf:
+    pdfs = []
+
+    pdfs += list(filter(callable, args))
+    pdfs += list(filter(callable, kwargs.values()))
+
+    assert pdfs
+
+    def sample(samples: int):
+        return random.choice(pdfs)(samples)
+
+    return sample
 
 
 @hydra.main(
@@ -22,23 +37,10 @@ from freakiir.pdf import Pdf
     version_base="1.2",
 )
 def _train(cfg: DictConfig) -> None:
-    def pdf(x: DictConfig) -> Pdf:
-        pdfs = list(instantiate(x).values())
-        pdfs = list(filter(callable, pdfs))
-
-        def sample(samples: int):
-            return random.choice(pdfs)(samples)
-
-        return sample
-
-    pdf_z = pdf(cfg.pdf_z)
-    pdf_p = pdf(cfg.pdf_p)
-
-    _ = pdf_z
-    _ = pdf_p
-
+    datamodule = instantiate(cfg.datamodule)
     model = instantiate(cfg.model)
 
+    _ = datamodule
     _ = model
 
 

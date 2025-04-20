@@ -15,12 +15,15 @@ model:
     sections: 4
 
 pdf:
+  _target_: freakiir.__main__._pdf
   epsilon: 1.0e-6
 
 pdf_z: ${pdf}
 pdf_p: ${pdf}
 
 defaults:
+  - datamodule: random-filter-with-listen-hrtf
+  - dataset
   - pdf:
       - uniform
   - _self_

@@ -1,0 +1,8 @@
+---
+
+dataset:
+  random-filter:
+    _target_: freakiir.dataset.RandomFilterDatasetConfig
+    sections: ${model.config.sections}
+    pdf_z: ${pdf_z}
+    pdf_p: ${pdf_p}
