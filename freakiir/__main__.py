@@ -37,6 +37,10 @@ def _train(cfg: DictConfig) -> None:
     _ = pdf_z
     _ = pdf_p
 
+    model = instantiate(cfg.model)
+
+    _ = model
+
 
 def main() -> None:
     parser = ArgumentParser(

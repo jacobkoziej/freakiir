@@ -8,6 +8,12 @@ hydra:
   job:
     chdir: true
 
+model:
+  _target_: freakiir.model.AllPass
+  config:
+    _target_: freakiir.model.ModelConfig
+    sections: 4
+
 pdf:
   epsilon: 1.0e-6
 
