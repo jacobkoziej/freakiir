@@ -52,17 +52,18 @@ def freqz_zpk(
     assert p.device == device
     assert k.device == device
 
-    k = k.reshape(k.shape + (1,) * (z.ndim - 1))
-
     end = (2 if whole else 1) * pi
 
     # our interval is right-open
     end -= end / N
 
+    shape = z.shape[:-1]
+
     w = torch.linspace(0, end, N).to(device)
+    w = w.repeat(*shape, 1)
     h = torch.exp(1j * w)
 
-    h = k * polyvalfromroots(h, z) / polyvalfromroots(h, p)
+    h = k.unsqueeze(-1) * polyvalfromroots(h, z) / polyvalfromroots(h, p)
 
     return w, h
 
