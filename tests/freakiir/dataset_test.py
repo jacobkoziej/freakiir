@@ -201,13 +201,14 @@ class TestRandomFilterDataset:
             assert output is None
             return
 
-        shape = (items,) * (not isinstance(item, int)) + (config.sections,)
+        shape = (items,) * (not isinstance(item, int))
+        sections = config.sections
 
-        assert output.w.shape == (dft_bins,)
+        assert output.w.shape == shape + (dft_bins,)
         assert output.h.shape == shape + (dft_bins,)
-        assert output.z.shape == shape + (2,)
-        assert output.p.shape == shape + (2,)
-        assert output.k.shape == (items,) * (items > 1)
+        assert output.z.shape == shape + (sections, 2)
+        assert output.p.shape == shape + (sections, 2)
+        assert output.k.shape == shape + (sections,)
 
     def test_len(self, batch_count: int, batch_size: int) -> None:
         config = self.config

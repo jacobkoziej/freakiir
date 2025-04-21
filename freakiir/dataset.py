@@ -17,13 +17,17 @@ from typing import (
 )
 from zipfile import ZipFile
 
-from einops import rearrange
+from einops import (
+    rearrange,
+    reduce,
+)
 from scipy.io import loadmat
 from torch import Tensor
 from torch.utils.data import Dataset
 
 from .dsp import (
     construct_sections,
+    flatten_sections,
     freqz_zpk,
     order_sections,
 )
@@ -326,9 +330,8 @@ class RandomFilterDataset(Dataset):
         else:
             z = config.pdf_z(samples)
 
-        if not isinstance(item, int):
-            z = rearrange(z, "(batch z) -> batch z", batch=batch_size)
-            p = rearrange(p, "(batch p) -> batch p", batch=batch_size)
+        z = rearrange(z, "(batch z) -> batch z", batch=batch_size)
+        p = rearrange(p, "(batch p) -> batch p", batch=batch_size)
 
         z = order_sections(z, down_order=config.down_order, dim=-1)
         p = order_sections(p, down_order=config.down_order, dim=-1)
@@ -337,12 +340,26 @@ class RandomFilterDataset(Dataset):
         p = construct_sections(p, config.sections, conjugate_pairs=True)
 
         k = (
-            (torch.norm(p, dim=-1) / torch.norm(z, dim=-1)).squeeze()
+            (torch.norm(p, dim=-1) / torch.norm(z, dim=-1))
             if config.all_pass
             else torch.ones(z.shape[:-1], dtype=z.real.dtype)
         )
 
-        w, h = freqz_zpk(z, p, k, N=config.dft_bins, whole=config.whole_dft)
+        w, h = freqz_zpk(
+            flatten_sections(z),
+            flatten_sections(p),
+            k,
+            N=config.dft_bins,
+            whole=config.whole_dft,
+        )
+        h = reduce(h, "... sections h -> ... h", "prod")
+
+        if isinstance(item, int):
+            h = h.squeeze(0)
+            w = w.squeeze(0)
+            z = z.squeeze(0)
+            p = p.squeeze(0)
+            k = k.squeeze(0)
 
         return RandomFilterDatasetOutput(h=h, w=w, z=z, p=p, k=k)
 
