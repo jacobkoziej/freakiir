@@ -64,7 +64,7 @@ class ConstructMinimumPhaseSections(nn.Module):
 
         z = construct_sections(z, sections, conjugate_pairs=True)
         p = construct_sections(p, sections, conjugate_pairs=True)
-        k = torch.ones(z.shape[:-1], dtype=z.real.dtype)
+        k = torch.ones(z.shape[:-1], dtype=z.real.dtype).to(z.device)
 
         return z, p, k
 
