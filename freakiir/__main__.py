@@ -3,7 +3,6 @@
 # __main__.py -- main
 # Copyright (C) 2025  Jacob Koziej <jacobkoziej@gmail.com>
 
-import random
 import sys
 
 import hydra
@@ -23,12 +22,7 @@ def _pdf(*args: list[Any], **kwargs: dict[str, Any]) -> Pdf:
     pdfs += list(filter(callable, args))
     pdfs += list(filter(callable, kwargs.values()))
 
-    assert pdfs
-
-    def sample(samples: int):
-        return random.choice(pdfs)(samples)
-
-    return sample
+    return pdfs
 
 
 @hydra.main(

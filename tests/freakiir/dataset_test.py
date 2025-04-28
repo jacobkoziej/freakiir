@@ -104,8 +104,8 @@ class TestRandomFilterDataset:
     def config(self) -> None:
         self.config = RandomFilterDatasetConfig(
             sections=1,
-            pdf_z=TestRandomFilterDataset.pdf_z,
-            pdf_p=TestRandomFilterDataset.pdf_p,
+            pdf_z=[TestRandomFilterDataset.pdf_z],
+            pdf_p=[TestRandomFilterDataset.pdf_p],
         )
 
     @staticmethod

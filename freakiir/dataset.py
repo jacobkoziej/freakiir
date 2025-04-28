@@ -4,6 +4,7 @@
 # Copyright (C) 2025  Jacob Koziej <jacobkoziej@gmail.com>
 
 import builtins
+import random
 
 import numpy as np
 import torch
@@ -252,8 +253,8 @@ class ListenHrtf(Dataset):
 @dataclass
 class RandomFilterDatasetConfig:
     sections: int
-    pdf_z: Pdf
-    pdf_p: Pdf
+    pdf_z: list[Pdf]
+    pdf_p: list[Pdf]
 
     all_pass: bool = True
     batch_count: int = 1024
@@ -319,7 +320,7 @@ class RandomFilterDataset(Dataset):
 
         samples = config.sections * batch_size
 
-        p = config.pdf_p(samples)
+        p = random.choice(config.pdf_p)(samples)
 
         if config.all_pass:
             r = 1 / p.abs()
@@ -328,7 +329,7 @@ class RandomFilterDataset(Dataset):
             z = r * torch.exp(1j * theta)
 
         else:
-            z = config.pdf_z(samples)
+            z = random.choice(config.pdf_z)(samples)
 
         z = rearrange(z, "(batch z) -> batch z", batch=batch_size)
         p = rearrange(p, "(batch p) -> batch p", batch=batch_size)
