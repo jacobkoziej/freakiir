@@ -41,6 +41,7 @@ class ModelConfig:
     sections: int = 4
     hidden_features: int = 2048
     hidden_layers: int = 4
+    negative_slope: float = 0.2
 
     down_order: bool = False
 
@@ -146,6 +147,7 @@ class AllPass(Base):
             hidden_features=config.hidden_features,
             out_features=2 * config.sections,
             hidden_layers=config.hidden_layers,
+            negative_slope=config.negative_slope,
         )
 
         self.preprocess = UnwrapPhase()

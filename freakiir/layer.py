@@ -80,12 +80,14 @@ class MlpConfig:
     hidden_features: int
     out_features: int
     hidden_layers: int
+    negative_slope: float = 0.2
 
     def __post_init__(self) -> None:
         assert self.in_features > 0
         assert self.hidden_features > 0
         assert self.out_features > 0
         assert self.hidden_layers > 0
+        assert self.negative_slope > 0
 
 
 class Mlp(nn.Module):
@@ -96,7 +98,7 @@ class Mlp(nn.Module):
             return nn.Sequential(
                 nn.Linear(in_features, out_features),
                 nn.LayerNorm(out_features),
-                nn.LeakyReLU(),
+                nn.LeakyReLU(config.negative_slope),
             )
 
         self.config = config

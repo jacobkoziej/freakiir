@@ -83,18 +83,24 @@ class TestMlpConfig:
     def hidden_layers(self, request: FixtureRequest) -> int:
         return request.param
 
+    @pytest.fixture(params=[-1.0, 0.0, 1.0])
+    def negative_slope(self, request: FixtureRequest) -> float:
+        return request.param
+
     def test_post_init_assert(
         self,
         in_features: int,
         hidden_features: int,
         out_features: int,
         hidden_layers: int,
+        negative_slope: float,
     ) -> None:
         args = {
             "in_features": in_features,
             "hidden_features": hidden_features,
             "out_features": out_features,
             "hidden_layers": hidden_layers,
+            "negative_slope": negative_slope,
         }
 
         success = True
