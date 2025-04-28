@@ -35,6 +35,8 @@ trainer:
   enable_checkpointing: true
   enable_model_summary: true
   enable_progress_bar: true
+  gradient_clip_algorithm: norm
+  gradient_clip_val: 0.5
   max_epochs: -1
 
 defaults:
