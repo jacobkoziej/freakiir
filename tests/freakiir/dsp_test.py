@@ -204,7 +204,7 @@ def test_unwrap(
     period: float,
     dim: int,
 ) -> None:
-    _, h = freqz_zpk(z, p, k)
+    _, h = freqz_zpk(z, p, k.unsqueeze(-1))
 
     phase = h.angle()
 
