@@ -37,11 +37,11 @@ ModelStepInput: TypeAlias = tuple[Tensor, Tensor]
 
 @dataclass(kw_only=True)
 class ModelConfig:
-    inputs: int = 512
-    sections: int = 4
-    hidden_features: int = 2048
-    hidden_layers: int = 4
-    negative_slope: float = 0.2
+    inputs: int
+    sections: int
+    hidden_features: int
+    hidden_layers: int
+    negative_slope: float
 
     down_order: bool = False
 

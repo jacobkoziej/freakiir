@@ -16,7 +16,12 @@ model:
   _target_: freakiir.model.AllPass
   config:
     _target_: freakiir.model.ModelConfig
+    inputs: 512
     sections: 4
+    hidden_features: 2048
+    hidden_layers: 4
+    negative_slope: 0.2
+    down_order: false
 
 pdf:
   _target_: freakiir.__main__._pdf
