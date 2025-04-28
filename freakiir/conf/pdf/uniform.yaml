@@ -1,5 +1,5 @@
 ---
 
 uniform:
-  _target_: freakiir.pdf.uniform
+  _target_: freakiir.pdf.Uniform
   epsilon: ${pdf.epsilon}

@@ -14,7 +14,9 @@ from torch import (
     pi,
 )
 
-from freakiir.pdf import uniform
+from freakiir.pdf import (
+    Uniform,
+)
 
 
 @pytest.fixture(params=[None, torch.float32, torch.float64])
@@ -38,7 +40,7 @@ def test_uniform(
     generator: Generator,
     samples: int,
 ) -> None:
-    pdf = uniform(
+    pdf = Uniform(
         r_a=r_a,
         r_b=r_b,
         theta_a=theta_a,

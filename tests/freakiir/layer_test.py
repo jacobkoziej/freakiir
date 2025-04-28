@@ -21,7 +21,7 @@ from freakiir.layer import (
     RealToComplex,
     ReflectIntoComplexUnitCircle,
 )
-from freakiir.pdf import uniform
+from freakiir.pdf import Uniform
 
 
 class TestComplexToReal:
@@ -226,7 +226,7 @@ class TestReflectIntoComplexUnitCircle:
         generator: Generator,
         samples: int,
     ) -> None:
-        pdf = uniform(
+        pdf = Uniform(
             r_a=0,
             r_b=2,
             theta_a=0,
